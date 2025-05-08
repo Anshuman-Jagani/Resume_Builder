@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 
 import HERO_IMG from '../assets/hero-img.png';
 import { useNavigate } from 'react-router-dom';
+import Login from './Auth/Login';
+import SignUp from './Auth/SignUp';
+import Modal from '../components/modal';
 
 const LandingPage = () => {
   const navigate = useNavigate;
@@ -25,7 +28,7 @@ const LandingPage = () => {
         </header>
 
         {/* Hero Content */}
-        <div className="flex flex-col md: flex-row items-center">
+        <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2 pr-4 mb-8 md:mb-0">
             <h1 className="text-5xl font-bold mb-6 leading-tight">
               Build Your{" "}
@@ -52,9 +55,65 @@ const LandingPage = () => {
             />
           </div>
         </div>
+
+        <section className='mt-5'>
+          <h2 className='text-2xl font-bold text-center mb-12'>
+            Features That Make You Shine
+          </h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+            <div className='bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition'>
+              <h3 className='text-lg font-semibold mb-3'>
+                Easy Editing
+              </h3>
+              <p className='text-gray-600'>
+                Update your resume section with live preview and instant
+                formatting.
+              </p>
+            </div>
+
+            <div className='bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition'>
+              <h3 className='text-lg font-semibold mb-3'>
+                Beautiful Templates
+              </h3>
+              <p className='text-gray-600'>
+                Choose from modern, professional templates that are easy to 
+                customize.
+              </p>
+            </div>
+
+            <div className='bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition'>
+              <h3 className='text-lg font-semibold mb-3'>
+                One-Click Export
+              </h3>
+              <p className='text-gray-600'>
+                Download your resume instantly as a high-quality PDF with One
+                click.
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
+      <div className='text-sm bg-gray-50 text-secondary text-center p-5 mt-5'>
+          Made By - Anshuman Jagani
+      </div>
+
+      <Modal  
+        isOpen = {openAuthModal}
+        onClose = {() => {
+          setOpenAuthMode(false);
+          setCurrentPage("login");
+        }}
+        hideHeader
+      >
+        <div>
+          {currentPage == "login" && <Login setCurrentPage={setCurrentPage} />}
+          {currentPage == "signup" && (
+            <SignUp setCurrentPage = {setCurrentPage}/>
+          )}
+        </div>
+      </Modal>
     </div>
-  )
-}
+  );
+};
 
 export default LandingPage
