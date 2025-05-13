@@ -4,7 +4,7 @@ export const validateEmail = (email) => {
 };
 
 // get lightest average color
-export const getLightColorFromImage = ({imageUrl}) => {
+export const getLightColorFromImage = (imageUrl) => {
     return new Promise((resolve, reject) => {
         // Check if imageUrl is Valid
         if (!imageUrl || typeof imageUrl !== 'string') {
@@ -48,7 +48,7 @@ export const getLightColorFromImage = ({imageUrl}) => {
                 }
             }
 
-            if (count == 0) {
+            if (count === 0) {
                 resolve('#ffffff'); // fallback if no bright pixel found
             } else {
                 r = Math.round( r / count);
