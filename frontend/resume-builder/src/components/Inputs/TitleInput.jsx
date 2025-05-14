@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LuCheck, LuPencil } from 'react-icons/lu';
 
 const TitleInput = ({title, setTitle}) => {
