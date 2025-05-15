@@ -64,4 +64,4 @@ const CreateResumeForm = () => {
   )
 }
 
-export default CreateResumeForm
+export default CreateResumeForm;

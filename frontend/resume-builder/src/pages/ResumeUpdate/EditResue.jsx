@@ -16,10 +16,11 @@ import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import StepProgress from '../../components/StepProgress';
 import ProfileInfoForm from './Forms/ProfileInfoForm';
+import ContactInfoForm from './Forms/ContactInfoForm';
 
 const EditResue = () => {
   const { resumeId } = useParams();
-  const navigae = useNavigate();
+  const navigate = useNavigate();
 
   const resumeRef = useRef(null);
   const resumeDownloadRef = useRef(null);
@@ -30,7 +31,7 @@ const EditResue = () => {
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState("profile-info");
+  const [currentPage, setCurrentPage] = useState("contact-info");
   const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title: "",
@@ -117,11 +118,21 @@ const EditResue = () => {
       case "profile-info":
         return (
           <ProfileInfoForm  
-            profileData = {resumeId?.profileInfo}
+            profileData = {resumeData?.profileInfo}
             updateSection={(key, value) => {
               updateSection("profileInfo", key, value);
             }}
             onNext={validateAndNext}
+          />
+        );
+      
+      case "contact-info":
+        return (
+          <ContactInfoForm
+            contactInfo = {resumeData?.contactInfo}
+            updateSection = {(key, value) => {
+              updateSection("contactInfo", key, value);
+            }}
           />
         );
 
