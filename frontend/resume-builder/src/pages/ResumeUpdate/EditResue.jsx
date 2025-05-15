@@ -21,6 +21,8 @@ import WorkExperienceForm from './Forms/WorkExperienceForm';
 import EducationDetailsForm from './Forms/EducationDetailsForm';
 import SkillsInfoForm from './Forms/SkillsInfoForm';
 import ProjectDetailsForm from './Forms/ProjectDetailsForm';
+import CertificationInfoForm from './Forms/CertificationInfoForm';
+import AdditionalInfoForm from './Forms/AdditionalInfoForm';
 
 const EditResue = () => {
   const { resumeId } = useParams();
@@ -35,7 +37,7 @@ const EditResue = () => {
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState("projects");
+  const [currentPage, setCurrentPage] = useState("additionalInfo");
   const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title: "",
@@ -103,7 +105,7 @@ const EditResue = () => {
         progress: 0,
       },
     ],
-    interest: [""],
+    interests: [""],
   });
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -187,6 +189,35 @@ const EditResue = () => {
             }}
             addArrayItem={(newItem) => addArrayItem("projects", newItem)}
             removeArrayItem = {(index) => removeArrayItem("projects", index)}
+          />
+        );
+
+      case "certifications":
+        return (
+          <CertificationInfoForm
+            certifications = {resumeData?.certifications}
+            updateArrayItem = {(index, key, value) => {
+              updateArrayItem("certifications", index, key, value);
+            }}
+            addArrayItem={(newItem) => addArrayItem("certifications", newItem)}
+            removeArrayItem = {(index) => 
+              removeArrayItem("certifications", index)
+            }
+          />
+        );
+      
+      case "additionalInfo":
+        return (
+          <AdditionalInfoForm 
+            languages = {resumeData.languages}
+            interests = {resumeData.interests}
+            updateArrayItem = {(section, index, key, value) => 
+              updateArrayItem(section, index, key, value)
+            }
+            addArrayItem={(section, newItem) => addArrayItem(section, newItem)}
+            removeArrayItem = {(section, index) => 
+              removeArrayItem(section, index)
+            }
           />
         );
 

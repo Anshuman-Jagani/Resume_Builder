@@ -73,10 +73,10 @@ const ResumeSchema = new mongoose.Schema(
         languages: [
             {
                 name: String,
-                progress: String,
+                progress: Number,
             },
         ],
-        interest: [String],
+        interests: [String],
     },
     {
         timestamps: {createdAt: "createdAt", updatedAt: "updatedAt"},
