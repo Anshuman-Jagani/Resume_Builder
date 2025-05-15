@@ -37,7 +37,7 @@ const EditResue = () => {
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState("additionalInfo");
+  const [currentPage, setCurrentPage] = useState("profile-info");
   const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title: "",
@@ -111,13 +111,177 @@ const EditResue = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   //Validate Input
-  const validateAndNext = (e) => {};
+  const validateAndNext = (e) => {
+    const errors = [];
+
+    switch (currentPage){
+      case "profile-info": {
+        const { fullName,designation, summary } = resumeData.profileInfo;
+        if (!fullName.trim()) errors.push("Full Name is required");
+        if (!designation. trim()) errors.push("Designation is required");
+        if (!summary. trim()) errors.push("Summary is required");
+        break; 
+      }
+
+      case "contact-info": {
+        const { email, phone } = resumeData.contactInfo;
+        if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email))
+          errors.push("Valid email is required.");
+        if (!phone.trim())
+          errors.push("Valid 10-digit phone number is required");
+        break;
+      }
+
+      case "work-experience" : {
+        resumeData.workExperience.forEach(
+          ({ company, role, startDate, endDate },index) => {
+            if (!company.trim())
+              errors.push(`Company is required in experience ${index + 1}`);
+            if (!role.trim())
+              errors.push(`Role is required in experience ${index + 1}`);
+            if (!startDate || !endDate)
+              errors.push(
+                `Start and End dates are required in experience ${index + 1}`
+              );
+          }
+        );
+        break;
+      }
+
+      case "education-info" : {
+        resumeData.education.forEach(
+          ({ degree, institution, startDate, endDate },index) => {
+            if (!degree.trim())
+              errors.push(`Degree is required in education ${index + 1}`);
+            if (!institution.trim())
+              errors.push(`Institution is required in education ${index + 1}`);
+            if (!startDate || !endDate)
+              errors.push(
+                `Start and End dates are required in education ${index + 1}`
+              );
+          }
+        );
+        break;
+      }
+
+      case "skills" : {
+        resumeData.skills.forEach(({ name, progress },index) => {
+          if (!name.trim())
+            errors.push(`Skill name is required in skills ${index + 1}`);
+          if (!progress.trim())
+            errors.push(
+              `Skill progress must be between 1 to 100 in skills ${index + 1}`
+            );
+        });
+        break;
+      }
+
+      case "projects" : {
+        resumeData.projects.forEach(({ title, discription },index) => {
+          if (!title.trim())
+            errors.push(`Project title is required in projects ${index + 1}`);
+          if (!discription.trim())
+            errors.push(
+              `Project discription is required in projects ${index + 1}`
+            );
+        });
+        break;
+      }
+
+      case "certifications" : {
+        resumeData.certifications.forEach(({ title, issuer },index) => {
+          if (!title.trim())
+            errors.push(`Certification title is required in certification ${index + 1}`);
+          if (!issuer.trim())
+            errors.push(`Issuer is required in certification ${index + 1}`);
+        });
+        break;
+      }
+
+      case "additionalInfo" : {
+        if (
+          resumeData.languages.length === 0 || 
+          !resumeData.languages[0].name?.trim()
+        ) {
+          errors.push("At least one language is required");
+        }
+
+        if (
+          resumeData.interests.length === 0 ||
+          !resumeData.interests[0].name?.trim()
+        ) {
+          errors.push("At least one interest is required");
+        }
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    if (errors.length > 0) {
+      setErrorMsg(errors.join(" , "));
+      return;
+    }
+
+    // Move to next step
+    setErrorMsg("");
+    goToNextStep();
+  };
 
   // Function to navigate to the next page
-  const goToNextStep = () => {};
+  const goToNextStep = () => {
+    const pages = [
+      "profile-info",
+      "contact-info",
+      "work-experience",
+      "education-info",
+      "skills",
+      "projects",
+      "certifications",
+      "additionalInfo",
+    ];
+
+    if (currentPage === "additionalInfo") setOpenPreviewModal(true);
+
+    const currentIndex = pages.indexOf(currentPage);
+    if (currentIndex !== -1 && currentIndex < pages.length - 1) {
+      const nextIndex = currentIndex + 1;
+      setCurrentPage(pages[nextIndex]);
+
+      //Set progress as percentage
+      const percent = Math.round((nextIndex / (pages.length - 1)) * 100);
+      setProgress(percent);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   // Function to navigate to the previous page
-  const goBack = () => {};
+  const goBack = () => {
+    const pages = [
+      "profile-info",
+      "contact-info",
+      "work-experience",
+      "education-info",
+      "skills",
+      "projects",
+      "certifications",
+      "additionalInfo",
+    ];
+
+    if (currentPage === "profile-info") navigate("/dashboard");
+
+    const currentIndex = pages.indexOf(currentPage);
+    if (currentIndex > 0){
+      const prevIndex = currentIndex - 1;
+      setCurrentPage(pages[prevIndex]);
+
+      // Update Progress
+      const percent = Math.round((prevIndex / (pages.length - 1)) * 100);
+      setProgress(percent);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const renderForm = () =>{
     switch (currentPage) {
