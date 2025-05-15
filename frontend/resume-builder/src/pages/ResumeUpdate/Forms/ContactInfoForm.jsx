@@ -37,7 +37,7 @@ const ContactInfoForm = ({contactInfo, updateSection}) => {
             <Input 
                 label="LinkedIn"
                 placeholder="https://linkedin.com/in/username"
-                type="text"
+                type="url"
                 value={contactInfo.linkedin || ""}
                 onChange={({target}) => updateSection("linkedin", target.value)}
             />
@@ -45,7 +45,7 @@ const ContactInfoForm = ({contactInfo, updateSection}) => {
             <Input 
                 label="GitHub"
                 placeholder="https://github.com/username"
-                type="text"
+                type="url"
                 value={contactInfo.github || ""}
                 onChange={({target}) => updateSection("github", target.value)}
             />
@@ -54,7 +54,7 @@ const ContactInfoForm = ({contactInfo, updateSection}) => {
                 <Input
                     label="Portfolio / Website"
                     placeholder="https://yourwebsite.com"
-                    type="text"
+                    type="url"
                     value={contactInfo.website || ""}
                     onChange={({target}) => updateSection("website", target.value)}
                 />
