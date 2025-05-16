@@ -23,8 +23,10 @@ import SkillsInfoForm from './Forms/SkillsInfoForm';
 import ProjectDetailsForm from './Forms/ProjectDetailsForm';
 import CertificationInfoForm from './Forms/CertificationInfoForm';
 import AdditionalInfoForm from './Forms/AdditionalInfoForm';
+import RenderResume from '../../components/ResumeTemplate/RenderResume';
+import { captureElementAsImage, dataURLtoFile, fixTailwindColors } from '../../utils/helper';
 
-const EditResue = () => {
+const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
 
@@ -168,7 +170,7 @@ const EditResue = () => {
         resumeData.skills.forEach(({ name, progress },index) => {
           if (!name.trim())
             errors.push(`Skill name is required in skills ${index + 1}`);
-          if (!progress.trim())
+          if (progress < 1 || progress > 100)
             errors.push(
               `Skill progress must be between 1 to 100 in skills ${index + 1}`
             );
@@ -177,12 +179,12 @@ const EditResue = () => {
       }
 
       case "projects" : {
-        resumeData.projects.forEach(({ title, discription },index) => {
+        resumeData.projects.forEach(({ title, description },index) => {
           if (!title.trim())
             errors.push(`Project title is required in projects ${index + 1}`);
-          if (!discription.trim())
+          if (!description.trim())
             errors.push(
-              `Project discription is required in projects ${index + 1}`
+              `Project description is required in projects ${index + 1}`
             );
         });
         break;
@@ -475,9 +477,69 @@ const EditResue = () => {
   };
 
   // upload thumbnail and resume profile img
-  const uploadResumeImages = async () => {};
+  const uploadResumeImages = async () => {
+    try {
+      setIsLoading(true);
 
-  const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => {};
+      fixTailwindColors(resumeRef.current);
+      const imageDataUrl = await captureElementAsImage(resumeRef.current);
+
+      // Convert base64 to File
+      const thumbnailFile = dataURLtoFile(
+        imageDataUrl,
+        `resume-${resumeId}.png`
+      );
+
+      const profileImageFile = resumeData?.profileInfo?.profileImg || null;
+
+      const formData = new FormData();
+      if (profileImageFile) formData.append("profileImage", profileImageFile);
+      if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
+
+      const uploadResponse = await axiosInstance.put(
+        API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
+        formData,
+        { headers: { "Content-Type" : "multipart/form-data" } }
+      );
+
+      const { thumbnailLink, profilePreviewUrl } = uploadResponse.data;
+
+      console.log("RESUME_DATA_", resumeData);
+
+      // Call the second API to update other resume data
+      await updateResumeDetails(thumbnailLink, profilePreviewUrl);
+
+      toast.success("Resume Updated Successfully!");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      toast. error("Failed to upload images");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => {
+    try {
+      setIsLoading(true);
+
+      const response = await axiosInstance.put(
+        API_PATHS.RESUME.UPDATE(resumeId),
+        {
+          ...resumeData,
+          thumbnailLink: thumbnailLink || "",
+          profileInfo: {
+            ...resumeData.profileInfo,
+            profilePreviewUrl: profilePreviewUrl || "",
+          },
+        }
+      );
+    } catch (err) {
+      console.error("Error Capturing Image", err);
+    } finally {
+      setIsLoading(false)
+    }
+  };
     
   // Delete Resume
   const handleDeleteResume = async () => {};
@@ -486,7 +548,11 @@ const EditResue = () => {
   const reactToPrintFn = useReactToPrint({ contentRef: resumeDownloadRef});
 
   // Function to update baseWidth based on the resume container size
-  const updateBaseWidth = () => {};
+  const updateBaseWidth = () => {
+    if (resumeRef.current) {
+      setBaseWidth(resumeRef.current.offsetWidth);
+    }
+  };
 
   useEffect(() => {
     updateBaseWidth();
@@ -587,14 +653,20 @@ const EditResue = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> 
 
         <div ref={resumeRef} className='h-[100vh]'>
            {/* Resume Template */}
+           <RenderResume
+            templateId = {resumeData?.template?.theme || ""}
+            resumeData = {resumeData}
+            colorPalette = {resumeData?.template?.colorPalette || []}
+            conatinerWidth = {baseWidth}
+          />
         </div>
       </div>
     </div>
   </DashboardLayout>
 }
 
-export default EditResue;
+export default EditResume;
