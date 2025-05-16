@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import LandingPage from "./pages/LandingPage";
 import Dashborad from './pages/Home/Dashborad';
-import EditResue from './pages/ResumeUpdate/EditResue';
+import EditResue from './pages/ResumeUpdate/EditResume';
 import UserProvider from './context/userContext';
 
 const App = () => {
