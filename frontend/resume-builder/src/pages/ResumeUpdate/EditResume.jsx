@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -506,7 +508,9 @@ const EditResume = () => {
 
       const { thumbnailLink, profilePreviewUrl } = uploadResponse.data;
 
-      console.log("RESUME_DATA_", resumeData);
+      console.log("RESUME_DATA___", resumeData);
+
+      console.log("ThumbnailLink:", thumbnailLink);
 
       // Call the second API to update other resume data
       await updateResumeDetails(thumbnailLink, profilePreviewUrl);
@@ -527,14 +531,14 @@ const EditResume = () => {
 
       const response = await axiosInstance.put(
         API_PATHS.RESUME.UPDATE(resumeId),
-        {
+        console.log("Sending updated resume data:", {
           ...resumeData,
           thumbnailLink: thumbnailLink || "",
           profileInfo: {
             ...resumeData.profileInfo,
             profilePreviewUrl: profilePreviewUrl || "",
           },
-        }
+        })
       );
     } catch (err) {
       console.error("Error Capturing Image", err);
@@ -577,7 +581,8 @@ const EditResume = () => {
     return () => {
       window.removeEventListener("resize", updateBaseWidth);
     };
-  }, []);  
+  }, []); 
+
   return <DashboardLayout>
     <div className='container mx-auto'>
       <div className='flex items-center justify-between gap-5 bg-white rounded-lg border border-purple-100 py-3 px-4 mb-4'>
@@ -618,7 +623,7 @@ const EditResume = () => {
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
         <div className='bg-white rounded-lg border border-purple-100 overflow-hidden'>
 
-          <StepProgress progress={0} />
+          <StepProgress progress={progress} />
 
           {renderForm()}
 
