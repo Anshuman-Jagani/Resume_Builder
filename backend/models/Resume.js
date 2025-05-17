@@ -58,7 +58,7 @@ const ResumeSchema = new mongoose.Schema(
         projects: [
             {
                 title: String,
-                discription: String,
+                description: String,
                 github: String,
                 liveDemo: String,
             },
