@@ -698,7 +698,7 @@ const EditResume = () => {
               template: value || prevState.template,
             }));
           }}
-          resumeData={resumeData}
+          resumeData={null}
           onClose={() => setOpenThemeSelector(false)}
         />
       </div>
