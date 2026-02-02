@@ -4,7 +4,7 @@ import HERO_IMG from '../assets/hero-img.png';
 import { useNavigate } from 'react-router-dom';
 import Login from './Auth/Login';
 import SignUp from './Auth/SignUp';
-import Modal from '../components/modal';
+import Modal from '../components/Modal';
 import { UserContext } from '../context/userContext';
 import ProfileInfoCard from '../components/Cards/ProfileInfoCard';
 

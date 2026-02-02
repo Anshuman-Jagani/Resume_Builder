@@ -18,11 +18,13 @@ const fileFilter = (req, file, cb) => {
     "image/jpg",
     "image/JPG",
     "image/PNG",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+    "application/vnd.ms-excel", // .xls
   ];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only .jpeg, .png and .jpg formats are allowed"), false);
+    cb(new Error("Only .jpeg, .png, .jpg, .xlsx and .xls formats are allowed"), false);
   }
 };
 

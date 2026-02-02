@@ -7,7 +7,7 @@ import { LuCirclePlus } from 'react-icons/lu';
 import moment from 'moment';
 import ResumeSummaryCard from '../../components/Cards/ResumeSummaryCard';
 import CreateResumeForm from './CreateResumeForm';
-import Modal from '../../components/modal';
+import Modal from '../../components/Modal';
 
 const Dashborad = () => {
   const navigate = useNavigate();
@@ -70,4 +70,4 @@ const Dashborad = () => {
   </DashboardLayout>;
 }
 
-export default Dashborad
+export default Dashborad;

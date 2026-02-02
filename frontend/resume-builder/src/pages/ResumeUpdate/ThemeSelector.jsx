@@ -94,7 +94,7 @@ const ThemeSelector = ({
         <div className='col-span-12 md:col-span-7 bg-white -mt-3' ref={resumeRef}>
             <RenderResume
                 templateId={selectedTemplate?.theme || ""}
-                resumeData={resumeData || DUMMY_RESUME_DATA}
+                resumeData={DUMMY_RESUME_DATA || resumeData}
                 conatinerWidth={baseWidth}
                 colorPalette={selectedColorPalette?.colors || []}
             />
